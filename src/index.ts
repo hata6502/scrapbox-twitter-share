@@ -13,7 +13,7 @@ scrapbox.PageMenu.addMenu({
     }
 
     const fullText = `${location.href}
-${pageElement.innerText}`;
+${pageElement.innerText.replace(/\n\n/g, "\n")}`;
 
     const parsedTweet = twitter.parseTweet(fullText);
 
