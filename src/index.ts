@@ -6,14 +6,16 @@ scrapbox.PageMenu.addMenu({
   title: "Share to Twitter",
   image: "https://i.gyazo.com/a4dfaf020789cbf745fa5c916e3a107e.png",
   onClick: () => {
-    const pageElement = document.querySelector(".page");
-
-    if (!(pageElement instanceof HTMLElement)) {
-      throw new Error("The page element is not an HTMLElement.");
-    }
+    // @ts-expect-error The type is not defined.
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+    const content = scrapbox.Page.lines
+      // @ts-expect-error The type is not defined.
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      .map((line) => line.text as string)
+      .join("\n") as string;
 
     const fullText = `${location.href}
-${pageElement.innerText.replace(/\n\n/g, "\n")}`;
+${content}`;
 
     const parsedTweet = twitter.parseTweet(fullText);
 
