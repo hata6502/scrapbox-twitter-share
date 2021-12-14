@@ -1,22 +1,29 @@
 import twitter from "twitter-text";
 
-const runScrapboxTwitterShare = (): void => {
+const runScrapboxTwitterShare = ({ appURL }: { appURL: string }): void => {
   // @ts-expect-error The type is not defined.
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
   scrapbox.PageMenu.addMenu({
     title: "Share to Twitter",
     image: "https://i.gyazo.com/a4dfaf020789cbf745fa5c916e3a107e.png",
-    onClick: () => {
-      // @ts-expect-error The type is not defined.
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-      const content = scrapbox.Page.lines
-        // @ts-expect-error The type is not defined.
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        .map((line) => line.text as string)
-        .join("\n") as string;
+    onClick: async () => {
+      const pageResponse = await fetch(
+        `${appURL}/api/pages/${
+          // @ts-expect-error The type is not defined.
+          scrapbox.Project.name
+        }/${
+          // @ts-expect-error The type is not defined.
+          scrapbox.Page.title
+        }`
+      );
+
+      if (!pageResponse.ok) {
+        throw new Error(`${pageResponse.status} ${pageResponse.statusText}`);
+      }
+
+      const page = await pageResponse.json();
 
       const fullText = `${location.href}
-${content}`;
+${page.descriptions.join("\n")}`;
 
       const parsedTweet = twitter.parseTweet(fullText);
 
