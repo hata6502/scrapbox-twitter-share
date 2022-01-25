@@ -22,14 +22,16 @@ const runScrapboxTwitterShare = ({ appURL }: { appURL: string }): void => {
 
       const page = await pageResponse.json();
 
-      const fullText = `${location.href}
+      // @ts-expect-error The type is not defined.
+      const fullText = `${scrapbox.Page.title}
+${location.href}
 ${page.descriptions.join("\n")}`;
 
       const parsedTweet = twitter.parseTweet(fullText);
 
       const text = fullText.slice(
         parsedTweet.validRangeStart,
-        parsedTweet.validRangeEnd
+        parsedTweet.validRangeEnd + 1
       );
 
       open(
