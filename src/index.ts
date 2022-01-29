@@ -12,7 +12,7 @@ const runScrapboxTwitterShare = ({ appURL }: { appURL: string }): void => {
           scrapbox.Project.name
         }/${
           // @ts-expect-error The type is not defined.
-          scrapbox.Page.title
+          encodeURIComponent(scrapbox.Page.title)
         }`
       );
 
